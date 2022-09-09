@@ -1,2 +1,2 @@
-# minikers
-MiniKers: Interaction-Powered Smart Environment Automation
+# MiniKers: Interaction-Powered Smart Environment Automation
+
