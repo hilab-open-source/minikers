@@ -8545,7 +8545,7 @@ CONN_04x2
 <part name="GND30" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
 <part name="J6" library="51281-0594" deviceset="51281-0594" device=""/>
 <part name="JP2" library="SparkFun-Jumpers" library_urn="urn:adsk.eagle:library:528" deviceset="JUMPER-SMT_2_NO" device="_SILK" package3d_urn="urn:adsk.eagle:package:39279/1"/>
-<part name="C21" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="2.2UF" device="-0805-25V-(+80/-20%)" package3d_urn="urn:adsk.eagle:package:37429/1" value="2.2uF"/>
+<part name="C21" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="2.2UF" device="-0805-25V-(+80/-20%)" package3d_urn="urn:adsk.eagle:package:37429/1" value="0.6F"/>
 <part name="GND42" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
 <part name="U$2" library="SOT65P280X145-8N" deviceset="AD5273" device=""/>
 <part name="GND43" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
@@ -8561,15 +8561,15 @@ CONN_04x2
 <part name="GND13" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
 <part name="R24" library="SparkFun-Resistors" library_urn="urn:adsk.eagle:library:532" deviceset="1KOHM" device="-0603-1/10W-1%" package3d_urn="urn:adsk.eagle:package:39650/1" value="1k"/>
 <part name="J7" library="SparkFun-Connectors" deviceset="CONN_02" device="" package3d_urn="urn:adsk.eagle:package:38039/1"/>
-<part name="R7" library="SparkFun-Resistors" library_urn="urn:adsk.eagle:library:532" deviceset="0.05OHM" device="-0603-1/5W-1%" package3d_urn="urn:adsk.eagle:package:39650/1" value="1K"/>
+<part name="R7" library="SparkFun-Resistors" library_urn="urn:adsk.eagle:library:532" deviceset="0.05OHM" device="-0603-1/5W-1%" package3d_urn="urn:adsk.eagle:package:39650/1" value="1"/>
 <part name="D4" library="Comchip - CDBHD140L-G" deviceset="COMCHIP_CDBHD140L-G" device="COMCHIP_CDBHD140L-G_0_0"/>
 <part name="Q4" library="SparkFun-DiscreteSemi" library_urn="urn:adsk.eagle:library:514" deviceset="MOSFET_PCH" device="-DMG2307L" package3d_urn="urn:adsk.eagle:package:38446/1" value="2.5A/30V/105mΩ"/>
 <part name="GND15" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
 <part name="GND22" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
 <part name="SUPPLY6" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="3.3V" device=""/>
 <part name="Q2" library="SparkFun-DiscreteSemi" library_urn="urn:adsk.eagle:library:514" deviceset="MOSFET_PCH" device="-DMG2307L" package3d_urn="urn:adsk.eagle:package:38446/1" value="2.5A/30V/105mΩ"/>
-<part name="R25" library="SparkFun-Resistors" library_urn="urn:adsk.eagle:library:532" deviceset="820KOHM" device="-0603-1/10W-1%" package3d_urn="urn:adsk.eagle:package:39650/1" value="820k"/>
-<part name="R26" library="SparkFun-Resistors" library_urn="urn:adsk.eagle:library:532" deviceset="2MOHMS" device="-0603-1/10W-1%" package3d_urn="urn:adsk.eagle:package:39650/1" value="2.0M"/>
+<part name="R25" library="SparkFun-Resistors" library_urn="urn:adsk.eagle:library:532" deviceset="820KOHM" device="-0603-1/10W-1%" package3d_urn="urn:adsk.eagle:package:39650/1" value="820K"/>
+<part name="R26" library="SparkFun-Resistors" library_urn="urn:adsk.eagle:library:532" deviceset="2MOHMS" device="-0603-1/10W-1%" package3d_urn="urn:adsk.eagle:package:39650/1" value="2M"/>
 <part name="SUPPLY22" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="VIN" device=""/>
 <part name="GND23" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
 <part name="C25" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="10UF" device="-0603-6.3V-20%" package3d_urn="urn:adsk.eagle:package:37414/1" value="10uF"/>
@@ -8589,13 +8589,12 @@ CONN_04x2
 <part name="GND16" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
 <part name="R5" library="SparkFun-Resistors" library_urn="urn:adsk.eagle:library:532" deviceset="10KOHM" device="-0603-1/10W-1%" package3d_urn="urn:adsk.eagle:package:39650/1" value="10k"/>
 <part name="R9" library="SparkFun-Resistors" library_urn="urn:adsk.eagle:library:532" deviceset="10KOHM" device="-0603-1/10W-1%" package3d_urn="urn:adsk.eagle:package:39650/1" value="10k"/>
-<part name="SUPPLY15" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="3.3V" device=""/>
 <part name="Q5" library="SparkFun-DiscreteSemi" library_urn="urn:adsk.eagle:library:514" deviceset="MOSFET-NCH" device="-AO3404A" package3d_urn="urn:adsk.eagle:package:38446/1" value="5.8A/30V/35mΩ"/>
 <part name="GND17" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
 <part name="Q6" library="SparkFun-DiscreteSemi" library_urn="urn:adsk.eagle:library:514" deviceset="MOSFET_PCH" device="-DMG2307L" package3d_urn="urn:adsk.eagle:package:38446/1" value="2.5A/30V/105mΩ"/>
 <part name="SUPPLY5" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="3.3V" device=""/>
 <part name="J5" library="SparkFun-Connectors" deviceset="CONN_02" device="" package3d_urn="urn:adsk.eagle:package:38039/1"/>
-<part name="R10" library="SparkFun-Resistors" library_urn="urn:adsk.eagle:library:532" deviceset="1OHM" device="-0603-1/10W-1%" package3d_urn="urn:adsk.eagle:package:39650/1" value="1K"/>
+<part name="R10" library="SparkFun-Resistors" library_urn="urn:adsk.eagle:library:532" deviceset="1OHM" device="-0603-1/10W-1%" package3d_urn="urn:adsk.eagle:package:39650/1" value="1"/>
 <part name="U6" library="MAX9934TAUA" deviceset="MAX9934TAUA" device=""/>
 <part name="GND18" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
 <part name="SUPPLY10" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="VCC" device=""/>
@@ -8631,7 +8630,7 @@ CONN_04x2
 <part name="R31" library="SparkFun-Resistors" library_urn="urn:adsk.eagle:library:532" deviceset="1KOHM" device="-0603-1/10W-1%" package3d_urn="urn:adsk.eagle:package:39650/1" value="5.36M"/>
 <part name="GND27" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
 <part name="GND31" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
-<part name="L2" library="SparkFun-Coils" library_urn="urn:adsk.eagle:library:512" deviceset="INDUCTOR" device="-0805-3.3UH" package3d_urn="urn:adsk.eagle:package:37579/1" value="3.3µH/±20%/450mA"/>
+<part name="L2" library="SparkFun-Coils" library_urn="urn:adsk.eagle:library:512" deviceset="INDUCTOR" device="-0805-3.3UH" package3d_urn="urn:adsk.eagle:package:37579/1" value="10uH"/>
 <part name="C14" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="1.0UF" device="-0805-25V-(+80/-20%)" package3d_urn="urn:adsk.eagle:package:37429/1" value="4.7uF"/>
 <part name="C22" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" deviceset="0.1UF" device="-0603-25V-(+80/-20%)" package3d_urn="urn:adsk.eagle:package:37414/1" value="0.1uF"/>
 <part name="GND34" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
@@ -8700,6 +8699,8 @@ CONN_04x2
 <wire x1="-130.302" y1="120.904" x2="-130.302" y2="96.52" width="0.254" layer="94" style="longdash"/>
 <wire x1="-128.524" y1="123.698" x2="-91.44" y2="123.698" width="0.254" layer="94" style="longdash"/>
 <text x="-377.452" y="88.812" size="3.81" layer="94">NFC</text>
+<text x="-317.5" y="-20.32" size="1.778" layer="95">Don't use this</text>
+<text x="-317.5" y="-15.24" size="1.778" layer="95">Don't use this</text>
 </plain>
 <instances>
 <instance part="U1" gate="U1" x="-327.328" y="120.292" smashed="yes">
@@ -8874,6 +8875,7 @@ CONN_04x2
 </instance>
 <instance part="C21" gate="G$1" x="-274.32" y="170.18" smashed="yes">
 <attribute name="NAME" x="-268.224" y="174.879" size="1.778" layer="95" font="vector" rot="R180"/>
+<attribute name="VALUE" x="-265.684" y="169.799" size="1.778" layer="96" font="vector" rot="R180"/>
 </instance>
 <instance part="GND42" gate="1" x="13.97" y="4.826" smashed="yes">
 <attribute name="VALUE" x="13.97" y="4.572" size="1.778" layer="96" align="top-center"/>
@@ -9020,9 +9022,6 @@ CONN_04x2
 <instance part="R9" gate="G$1" x="-60.96" y="91.44" smashed="yes">
 <attribute name="NAME" x="-55.88" y="87.884" size="1.778" layer="95" font="vector" align="bottom-center"/>
 <attribute name="VALUE" x="-60.96" y="89.916" size="1.778" layer="96" font="vector" align="top-center"/>
-</instance>
-<instance part="SUPPLY15" gate="G$1" x="-45.72" y="96.52" smashed="yes">
-<attribute name="VALUE" x="-45.72" y="99.314" size="1.778" layer="96" align="bottom-center"/>
 </instance>
 <instance part="Q5" gate="NMOS" x="-276.86" y="-63.5" smashed="yes">
 <attribute name="NAME" x="-271.78" y="-63.5" size="1.778" layer="95" font="vector"/>
@@ -9600,18 +9599,6 @@ CONN_04x2
 <pinref part="Q3" gate="G$1" pin="S"/>
 <wire x1="-88.9" y1="63.5" x2="-73.66" y2="63.5" width="0.1524" layer="91"/>
 <wire x1="-73.66" y1="63.5" x2="-73.66" y2="68.58" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="R5" gate="G$1" pin="2"/>
-<wire x1="-55.88" y1="96.52" x2="-50.8" y2="96.52" width="0.1524" layer="91"/>
-<wire x1="-50.8" y1="96.52" x2="-50.8" y2="93.98" width="0.1524" layer="91"/>
-<pinref part="R9" gate="G$1" pin="2"/>
-<wire x1="-50.8" y1="93.98" x2="-50.8" y2="91.44" width="0.1524" layer="91"/>
-<wire x1="-50.8" y1="91.44" x2="-55.88" y2="91.44" width="0.1524" layer="91"/>
-<pinref part="SUPPLY15" gate="G$1" pin="3.3V"/>
-<wire x1="-45.72" y1="96.52" x2="-45.72" y2="93.98" width="0.1524" layer="91"/>
-<wire x1="-45.72" y1="93.98" x2="-50.8" y2="93.98" width="0.1524" layer="91"/>
-<junction x="-50.8" y="93.98"/>
 </segment>
 <segment>
 <pinref part="SUPPLY5" gate="G$1" pin="3.3V"/>
@@ -10312,16 +10299,6 @@ CONN_04x2
 <pinref part="J8" gate="G$1" pin="3"/>
 </segment>
 </net>
-<net name="N$5" class="0">
-<segment>
-<pinref part="D4" gate="G$0" pin="+"/>
-<wire x1="-312.42" y1="175.26" x2="-309.88" y2="175.26" width="0.1524" layer="91"/>
-<wire x1="-309.88" y1="195.58" x2="-309.88" y2="175.26" width="0.1524" layer="91"/>
-<pinref part="Q4" gate="G$1" pin="S"/>
-<wire x1="-297.18" y1="193.04" x2="-297.18" y2="195.58" width="0.1524" layer="91"/>
-<wire x1="-297.18" y1="195.58" x2="-309.88" y2="195.58" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="RECEN" class="0">
 <segment>
 <pinref part="Q4" gate="G$1" pin="G"/>
@@ -10363,6 +10340,17 @@ CONN_04x2
 <pinref part="Q3" gate="G$1" pin="D"/>
 <wire x1="-73.66" y1="78.74" x2="-73.66" y2="83.82" width="0.1524" layer="91"/>
 <junction x="-73.66" y="83.82"/>
+<wire x1="-73.66" y1="83.82" x2="-73.66" y2="86.36" width="0.1524" layer="91"/>
+<wire x1="-73.66" y1="86.36" x2="-45.72" y2="86.36" width="0.1524" layer="91"/>
+<pinref part="R5" gate="G$1" pin="2"/>
+<wire x1="-55.88" y1="96.52" x2="-50.8" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="-50.8" y1="96.52" x2="-50.8" y2="93.98" width="0.1524" layer="91"/>
+<pinref part="R9" gate="G$1" pin="2"/>
+<wire x1="-50.8" y1="93.98" x2="-50.8" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="-50.8" y1="91.44" x2="-55.88" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="-45.72" y1="86.36" x2="-45.72" y2="93.98" width="0.1524" layer="91"/>
+<wire x1="-45.72" y1="93.98" x2="-50.8" y2="93.98" width="0.1524" layer="91"/>
+<junction x="-50.8" y="93.98"/>
 </segment>
 </net>
 <net name="INTERRUPT" class="0">
@@ -10431,6 +10419,15 @@ CONN_04x2
 <pinref part="E1" gate="G$1" pin="P0.29"/>
 <wire x1="-289.976" y1="-38.336" x2="-276.86" y2="-38.336" width="0.1524" layer="91"/>
 <label x="-287.02" y="-38.1" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="D4" gate="G$0" pin="+"/>
+<wire x1="-312.42" y1="175.26" x2="-309.88" y2="175.26" width="0.1524" layer="91"/>
+<wire x1="-309.88" y1="195.58" x2="-309.88" y2="175.26" width="0.1524" layer="91"/>
+<pinref part="Q4" gate="G$1" pin="S"/>
+<wire x1="-297.18" y1="193.04" x2="-297.18" y2="195.58" width="0.1524" layer="91"/>
+<wire x1="-297.18" y1="195.58" x2="-309.88" y2="195.58" width="0.1524" layer="91"/>
+<label x="-307.34" y="195.58" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$13" class="0">
