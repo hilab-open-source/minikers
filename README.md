@@ -5,7 +5,8 @@ MiniKers is an fleet of interaction-powered environment automation devices that 
 
 Please refer to the [paper](https://dl.acm.org/doi/10.1145/3550287) for more details.
 
-![All Objects](/images/allobjects.jpg {width=100 height=400})
+![All Objects](/images/allobjects.jpg)
+<img src="https://github.com/hilab-open-source/minikers/blob/master/images/allobjects.jpg" width="320" height="480" />
 
 ## Hardware
 We designed a circuit to accomodate the manual and automatic operations of everyday objects. The circuit features a discharging and a charging mode to support the motor being used as either an actuator or a generator. It has a rechargeable supercapacitor and a Lithium-ion Polymer (Li-Po) battery. 
