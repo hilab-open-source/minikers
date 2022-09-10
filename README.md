@@ -8,6 +8,8 @@ Please refer to the [paper](https://dl.acm.org/doi/10.1145/3550287) for more det
 ![All Objects](/images/allobjects.jpg)
 
 ## Hardware
+We designed a circuit to accomodate the manual and automatic operations of everyday objects. The circuit features a discharging and a charging mode to support the motor being used as either an actuator or a generator. It has a rechargeable supercapacitor and a Lithium-ion Polymer (Li-Po) battery. 
+
 ![Board](/images/board.png)
 
 
