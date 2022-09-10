@@ -9,6 +9,6 @@ Please refer to the [paper](https://dl.acm.org/doi/10.1145/3550287) for more det
 
 
 ## Contact
-[xiaoyingy@ucla.edu](https://mail.google.com/mail/u/0/?fs=1&tf=cm&source=mailto&to=xiaoyingy@ucla.edu)
+[info@hilab.dev](https://mail.google.com/mail/u/0/?fs=1&tf=cm&source=mailto&to=info@hilab.dev)
 
 
