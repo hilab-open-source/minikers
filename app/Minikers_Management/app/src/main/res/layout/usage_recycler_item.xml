@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recyclerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="false"
+        app:cardBackgroundColor="#fff"
+        app:cardCornerRadius="0dp"
+        app:contentPadding="0dp"
+
+        android:layout_marginBottom="8dp">
+
+
+        <LinearLayout
+            android:id="@+id/graphsHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:cardUseCompatPadding="true">
+
+            <TextView
+                android:id="@+id/timeText"
+                android:background="@color/teal_200"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:textSize="24sp"
+                android:textColor="@color/black"
+                android:text="Time" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/currentChart1"
+                android:layout_width="250dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="41dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/endTimeText"
+                android:text="End time:"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:fontFamily="sans-serif"
+                android:paddingStart="30dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/voltageText"
+                android:text="Voltage:"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:fontFamily="sans-serif"
+                android:paddingStart="30dp"/>
+
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+</LinearLayout>

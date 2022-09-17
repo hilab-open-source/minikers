@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/MiniKers-Project/minikers/app/src/main/res/layout/activity_single_day_data.xml" value="0.18854166666666666" />
+        <entry key="..\:/MiniKers-Project/minikers/app/src/main/res/layout/calender_test.xml" value="0.18854166666666666" />
+        <entry key="..\:/MiniKers-Project/minikers/app/src/main/res/layout/device_control.xml" value="0.1" />
+        <entry key="..\:/MiniKers-Project/minikers/app/src/main/res/layout/graphs_list_recycler.xml" value="0.1" />
+        <entry key="..\:/MiniKers-Project/minikers/app/src/main/res/layout/listitem_device.xml" value="0.1" />
+        <entry key="..\:/Users/jsxu3/AndroidStudioProjects/MiniKers-Project/minikers/app/src/main/res/layout/actionbar_indeterminate_progress.xml" value="0.275" />
+        <entry key="..\:/Users/jsxu3/AndroidStudioProjects/MiniKers-Project/minikers/app/src/main/res/layout/activity_single_day_data.xml" value="0.253125" />
+        <entry key="..\:/Users/jsxu3/AndroidStudioProjects/MiniKers-Project/minikers/app/src/main/res/layout/device_control.xml" value="0.33" />
+        <entry key="..\:/Users/jsxu3/AndroidStudioProjects/MiniKers-Project/minikers/app/src/main/res/layout/devicescan_actionbar.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/jsxu3/AndroidStudioProjects/MiniKers-Project/minikers/app/src/main/res/layout/gatt_services_characteristics.xml" value="0.18034447821681865" />
+        <entry key="..\:/Users/jsxu3/AndroidStudioProjects/MiniKers-Project/minikers/app/src/main/res/layout/graphs_list_recycler.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/jsxu3/AndroidStudioProjects/MiniKers-Project/minikers/app/src/main/res/layout/listitem_device.xml" value="0.5" />
+        <entry key="..\:/Users/jsxu3/AndroidStudioProjects/MiniKers-Project/minikers/app/src/main/res/layout/read_test.xml" value="0.275" />
+        <entry key="..\:/Users/jsxu3/AndroidStudioProjects/MiniKers-Project/minikers/app/src/main/res/menu/gatt_services.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/jsxu3/AndroidStudioProjects/MiniKers-Project/minikers/app/src/main/res/menu/main.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/jsxu3/Desktop/MiniKers-Project/minikers/app/src/main/res/layout/device_control.xml" value="0.1526268115942029" />
+        <entry key="..\:/Users/jsxu3/Desktop/MiniKers-Project/minikers/app/src/main/res/layout/read_test.xml" value="0.1526268115942029" />
+        <entry key="app/src/main/res/layout/actionbar_indeterminate_progress.xml" value="0.359375" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.17477203647416414" />
+        <entry key="app/src/main/res/layout/calender_test.xml" value="0.29010416666666666" />
+        <entry key="app/src/main/res/layout/device_control.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/gatt_services_characteristics.xml" value="0.359375" />
+        <entry key="app/src/main/res/layout/listitem_device.xml" value="0.359375" />
+        <entry key="app/src/main/res/layout/test.xml" value="0.34010416666666665" />
+        <entry key="app/src/main/res/menu/gatt_services.xml" value="0.359375" />
+        <entry key="app/src/main/res/menu/main.xml" value="0.16018518518518518" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

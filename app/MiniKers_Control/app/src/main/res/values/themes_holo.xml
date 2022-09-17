@@ -1,0 +1,49 @@
+<resources>
+
+    <!-- Activity themes -->
+    <style name="Theme.Base" parent="android:Theme.Holo.Light.DarkActionBar" >
+        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimaryVariant">@color/green_variant</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="colorPrimaryDark">@color/green_variant</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+
+        <item name="android:actionBarStyle">@style/AppTheme.ActionBar</item>
+        <item name="android:actionMenuTextAppearance">@style/menuTextStyle</item>
+
+
+    </style>
+
+    <style name="AppTheme.ActionBar" parent="Widget.AppCompat.Light.ActionBar">
+<!--        <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleText</item>-->
+        <item name="android:height">56dp</item>
+<!--        <item name="title">@string/app_name</item>-->
+<!--        <item name="titleEnabled">true</item>-->
+<!--        <item name="showTitle">true</item>-->
+<!--        <item name="title">@string/app_name</item>-->
+        <item name="android:background">@color/green</item>
+        <item name="actionMenuTextColor">@color/teal_200</item>
+        <item name="android:titleTextStyle">@style/actionBarTitleStyle</item>
+
+    </style>
+
+    <style name="actionBarTitleStyle" parent="@style/TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+
+    <style name="menuTextStyle"
+        parent="@style/TextAppearance.AppCompat.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="paddingStart">0dp</item>
+    </style>
+
+</resources>

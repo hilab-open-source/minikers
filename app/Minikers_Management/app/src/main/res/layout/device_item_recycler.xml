@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/deviceItemLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="#fff"
+        app:cardCornerRadius="5dp"
+        app:contentPadding="5dp"
+        android:layout_marginBottom="8dp"
+        android:clickable="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false">
+
+            <ImageView
+                android:id="@+id/deviceIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/ic_menu_gallery"
+                android:layout_alignParentStart="true"
+                android:paddingRight="10dp"
+                android:clickable="false"
+                android:layout_centerVertical="true"/>
+
+
+            <LinearLayout
+                android:id="@+id/recyclerItemTextHolder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toRightOf="@id/deviceIcon"
+                android:clickable="false">
+
+                <TextView
+                    android:id="@+id/recyclerItemDeviceName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Device name"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif"
+                    android:clickable="false"/>
+
+                <TextView
+                    android:id="@+id/recyclerItemDeviceAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mac address: AA:BB:CC:DD:EE:FF"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="sans-serif"
+                    android:clickable="false"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+</RelativeLayout>
