@@ -6,14 +6,9 @@ import android.util.Log;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
-import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
+
 
 public class EventDecorator implements DayViewDecorator {
 
@@ -34,7 +29,6 @@ public class EventDecorator implements DayViewDecorator {
 
     public EventDecorator(int colors[], CalendarDay date, ArrayList<String> uses, int maxWidth, int maxHeight) {
         this.colors = colors;
-        //this.dates = new HashSet<>(dates);
         this.date = date;
         this.uses = uses;
         this.maxWidth = maxWidth;

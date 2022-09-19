@@ -22,6 +22,13 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -30,11 +37,16 @@ import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import java.time.LocalDate;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 
 public class CalendarActivity extends AppCompatActivity {
@@ -55,16 +67,21 @@ public class CalendarActivity extends AppCompatActivity {
     private int TILE_HEIGHT;
 
 
-    private UsageViewModel mUsageViewModel;
+
 
     CombinedChart batteryGraph;
 
     private TextView deviceInfoText;
 
+    FirebaseFirestore db;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        db = FirebaseFirestore.getInstance();
 
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
@@ -76,11 +93,9 @@ public class CalendarActivity extends AppCompatActivity {
 
         Log.d(TAG, "Device name is " + mDeviceName);
 
-        mUsageViewModel = MainActivity.mUsageViewModel;
 
 
         setUpCalendarView();
-
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -93,6 +108,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         //Todo: replace this line with a call to setUpBatteryGraph using real data
         setUpSampleBatteryGraph();
+
 
     }
 
@@ -133,7 +149,7 @@ public class CalendarActivity extends AppCompatActivity {
         calendar = (MaterialCalendarView) findViewById(R.id.calendar);
 
         //MaterialCalendarView's getTileWidth() returns negative so this is a temp fix
-        //divide screen width by 7.5 because there are 7 days in a row, and we want some space between linespans of adjacent dates so they don't touch
+        //Divide screen width by 7.5 because there are 7 days in a row, and we want some space between linespans of adjacent dates so they don't touch
         TILE_WIDTH = (int) (getResources().getDisplayMetrics().widthPixels / 7.5);
         TILE_HEIGHT = (int) (getResources().getDisplayMetrics().heightPixels / 12);
         Log.d(TAG, "Tile width is " + TILE_WIDTH + " and tile height is " + TILE_HEIGHT);
@@ -148,6 +164,9 @@ public class CalendarActivity extends AppCompatActivity {
                 //Go to SingleDayData page
                 Intent i = new Intent(getApplicationContext(), SingleDayData.class);
                 i.putExtra("date", formattedDate);
+                i.putExtra("year", date.getYear());
+                i.putExtra("month", date.getMonth());
+                i.putExtra("day", date.getDay());
                 i.putExtra(EXTRAS_DEVICE_NAME, mDeviceName);
                 i.putExtra(EXTRAS_DEVICE_ADDRESS,  mDeviceAddress);
                 startActivity(i);
@@ -160,47 +179,65 @@ public class CalendarActivity extends AppCompatActivity {
         showMonthsLineSpans(calendar.getCurrentDate());
 
         calendar.setOnMonthChangedListener(new OnMonthChangedListener() {
-               @Override
-               public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
-                   showMonthsLineSpans(date);
+                                               @Override
+                                               public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+                                                   showMonthsLineSpans(date);
 
-                   //Todo: also change the battery graph
-               }
-           }
+                                                   //Todo: also change the battery graph (for when the app takes real data)
+                                               }
+                                           }
         );
     }
 
     private void showMonthsLineSpans(CalendarDay focusedDate) {
-        //updatelinespan for every single day in the month
+        Log.d(TAG, "showMonthsLineSpans");
         LocalDate ld = LocalDate.of(focusedDate.getYear(), focusedDate.getMonth(), focusedDate.getDay());
         int currentMonth = focusedDate.getMonth();
         int i = currentMonth;
 
-        Log.d(TAG, "showMonthsLineSpans");
 
-        //Iterate through the entire month
-        //Would rather keep a map of dates that have linespans to display
-        while(i <= currentMonth) {
-            updateLineSpan(ld);
 
-            ld = ld.plusDays(1);
-            i = ld.getMonthValue();
-        }
+        Map<LocalDate, ArrayList<String>> datesAndUses = new HashMap<LocalDate, ArrayList<String>>();
+        if(db == null)
+            Log.w(TAG, "FirebaseFirestore database reference is null");
+        db.collection(mDeviceAddress)
+                .orderBy(FirestoreKey.START_TIME_KEY, Query.Direction.ASCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //updateLineSpan(currentday)
+                                long startTimeEpoch = ((Timestamp) document.get(FirestoreKey.START_TIME_KEY)).getSeconds();
+                                ZoneOffset offset = ZoneId.systemDefault().getRules().getOffset(LocalDateTime.now());
+                                LocalDate startDate = LocalDateTime.ofEpochSecond(startTimeEpoch, 0, offset).toLocalDate();
+
+                                if(datesAndUses.containsKey(startDate)) {
+                                    datesAndUses.get(startDate).add(document.getString(FirestoreKey.MODE_KEY));
+                                }
+                                else {
+                                    //create the arraylist
+                                    ArrayList<String> uses = new ArrayList<String>();
+                                    uses.add(document.getString(FirestoreKey.MODE_KEY));
+
+                                    datesAndUses.put(startDate, uses);
+                                }
+
+                            }
+
+                            for (LocalDate ld : datesAndUses.keySet()) {
+                                updateLineSpan(ld, datesAndUses.get(ld));
+                            }
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
 
-    private void updateLineSpan(LocalDate date) {
-        if(mUsageViewModel == null) {
-            Log.d(TAG, "mUsageViewModel is null");
-
-            return;
-        }
-
-
-        Log.d(TAG, "updateLineSpan for " + date.toString());
-//        Log.d(TAG, "updateLineSpan's actuation type list: " + mUsageViewModel.getActuationTypesFromDayAsOrdinaryList(date.toString()).toString());
-        updateLineSpan(date, new ArrayList<String>(mUsageViewModel.getUsageTypesFromDayForMacAddress(mDeviceAddress, date.toString())) );
-    }
 
 
     private boolean drawBatteryGraph(CombinedChart lc, List<Integer> batteryLevels, List<Float> netChangePerDay, List<Integer> days, String title, int color) {

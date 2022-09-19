@@ -3,7 +3,6 @@ package com.example.minikers;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
@@ -12,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 import android.os.Bundle;
@@ -32,44 +30,37 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import androidx.lifecycle.ViewModelProvider;
-import androidx.sqlite.db.SimpleSQLiteQuery;
-
-
-import com.dropbox.core.android.Auth;
-import com.dropbox.core.json.JsonReadException;
-import com.dropbox.core.oauth.DbxCredential;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-
-import java.io.OutputStream;
 import java.time.LocalDate;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import java.util.List;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
+import java.util.Map;
 import java.util.UUID;
 
-import com.dropbox.core.DbxRequestConfig;
-import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.FileMetadata;
 
-import com.dropbox.core.v2.files.WriteMode;
-import com.dropbox.core.v2.users.FullAccount;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 
 public class DeviceControlActivity extends AppCompatActivity {
@@ -99,7 +90,6 @@ public class DeviceControlActivity extends AppCompatActivity {
 
 
 
-
     private TextView deviceNameText;
 
     private Button disconnectButton;
@@ -110,16 +100,11 @@ public class DeviceControlActivity extends AppCompatActivity {
     ImageButton voiceInputButton;
     private SpeechRecognizer sr;
 
-    public static UsageViewModel mUsageViewModel;
-
-
-    private DbxClientV2 mDbxClient;
-
-    private static final String APP_KEY = "cok1ath2jf73h6u";
-    private ArrayList<String> app_scope;
 
 
     private String location;
+
+    FirebaseFirestore db; //Holds singleton FirebaseFirestore instance
 
     // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -199,7 +184,6 @@ public class DeviceControlActivity extends AppCompatActivity {
 
         deviceNameText.setText("Device name: " + mDeviceName + "\n Location: " + location);
 
-        mUsageViewModel = new ViewModelProvider(this).get(UsageViewModel.class);
 
 
 //        getSupportActionBar().setTitle(mDeviceName);
@@ -220,110 +204,15 @@ public class DeviceControlActivity extends AppCompatActivity {
         setUpButtons();
 
 
-        app_scope = new ArrayList<String>();
-        app_scope.add("account_info.read");
-        app_scope.add("files.metadata.read");
-        app_scope.add("files.metadata.write");
-        app_scope.add("files.content.read");
-        app_scope.add("files.content.write");
 
+
+
+        db = FirebaseFirestore.getInstance(); //Uses same instance throughout the app's lifecycle, so doesn't create a new one if one already exists
 
 
     }
 
-    private void uploadDatabaseToDropbox(DbxCredential credentials) {
-        String databasePath = "/data/data/com.example.minikers/databases/word_database";
-        File dbFile = new File(databasePath);
-        if(!dbFile.exists())
-            return;
 
-        Thread networkThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try  {
-                    DbxRequestConfig config = DbxRequestConfig.newBuilder("MiniKers/1.0").build();
-                    mDbxClient = new DbxClientV2(config, credentials);
-                    FullAccount account = mDbxClient.users().getCurrentAccount();
-                    Log.d(TAG, "Account: " + account.getName().getDisplayName());
-
-                    uploadFile(dbFile);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        networkThread.start();
-
-    }
-
-    protected FileMetadata uploadFile(File fileToUpload) {
-        try {
-
-            String remoteFolderPath = "";
-
-            // Note - this is not ensuring the name is a valid dropbox file name
-            String remoteFileName = fileToUpload.getName();
-            try (InputStream inputStream = new FileInputStream(fileToUpload)) {
-                return mDbxClient.files().uploadBuilder(remoteFolderPath + "/" + remoteFileName)
-                        .withMode(WriteMode.OVERWRITE)
-                        .uploadAndFinish(inputStream);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public static boolean exportDB(Context context) {
-        String DATABASE_NAME = "word-database";
-        String databasePath = "/data/data/com.example.minikers/databases/word_database";
-        Log.d(TAG, "Database path is " + databasePath);
-        String inFileName = databasePath;
-        try {
-            File dbFile = new File(inFileName);
-            if(!dbFile.exists())
-                Log.d(TAG, "dbFile doesn't exist");
-            else {
-                Log.d(TAG, "dbFile exists");
-            }
-//            if(!dbFile.canWrite())
-//                dbFile.setWritable(true);
-            if(!dbFile.canRead())
-                dbFile.setReadable(true);
-            FileInputStream fis = new FileInputStream(dbFile);
-
-            String outFileName = context.getFilesDir() + "/" + DATABASE_NAME;
-            Log.d(TAG, "Attempting to write database file to " + outFileName);
-            File outFile = new File(outFileName);
-            outFile.createNewFile(); //does nothing if the file already exists
-            if(!outFile.canWrite())
-                outFile.setWritable(true);
-            if(!outFile.canRead())
-                outFile.setReadable(true);
-            OutputStream output = new FileOutputStream(outFile);
-
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = fis.read(buffer)) > 0) {
-                output.write(buffer, 0, length);
-            }
-            //Close the streams
-            output.flush();
-            output.close();
-            fis.close();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     private void setUpButtons(){
         //Set up calendar and tester buttons for auto/manual use
@@ -399,15 +288,47 @@ public class DeviceControlActivity extends AppCompatActivity {
         String dateString = date.format(formatter); //Formats into YYYY-MM-DD
 
         String actuationTypeString = (actuationType == ActuationType.Automatic) ? "Automatic" : "Manual";
+        //Todo: error handling for actuationtype
         Log.d(TAG, "Adding a " + actuationTypeString + " event with start time " + startTime.toString());
-
-
-
-        Usage c = new Usage(mDeviceAddress, mDeviceName, dateString, startTime.toString(), endTime.toString(), actuationTypeString, Arrays.toString(xcurrent), Arrays.toString(ycurrent), voltage, energy);
-        mUsageViewModel.insert(c);
-
         Log.d(TAG, "New" + actuationTypeString + " usage");
 
+
+        Map<String, Object> newUsage = new HashMap<String, Object>();
+        newUsage.put(FirestoreKey.DEVICE_ADDRESS_KEY, mDeviceAddress);
+        newUsage.put(FirestoreKey.DEVICE_NAME_KEY, mDeviceName);
+
+        LocalDateTime st = date.atTime(startTime);
+        ZoneOffset offset = ZoneId.systemDefault().getRules().getOffset(st);
+        long stEpoch = st.toEpochSecond(offset) * 1000; //multiply by 1000 to get milliseconds
+        newUsage.put(FirestoreKey.START_TIME_KEY, new Date(stEpoch));
+
+        LocalDateTime et = date.atTime(endTime);
+        ZoneOffset etoffset = ZoneId.systemDefault().getRules().getOffset(et);
+        long etEpoch = et.toEpochSecond(offset) * 1000; //multiply by 1000 to get milliseconds
+        newUsage.put(FirestoreKey.END_TIME_KEY, new Date(etEpoch));
+
+        newUsage.put(FirestoreKey.MODE_KEY, actuationTypeString);
+
+
+        newUsage.put(FirestoreKey.CURRENT_X_KEY, Arrays.asList(ArrayUtils.toObject(xcurrent)));
+        newUsage.put(FirestoreKey.CURRENT_Y_KEY, Arrays.asList(ArrayUtils.toObject(ycurrent)));
+        newUsage.put(FirestoreKey.VOLTAGE_KEY, voltage);
+        newUsage.put(FirestoreKey.ENERGY_KEY, energy);
+
+        db.collection(mDeviceAddress)
+                .add(newUsage)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
     }
 
 
@@ -534,40 +455,6 @@ public class DeviceControlActivity extends AppCompatActivity {
         }
 
 
-        mUsageViewModel.checkpoint(new SimpleSQLiteQuery("pragma wal_checkpoint(full)")); //to write journaled changes to main database file
-
-        // Check Dropbox authorization
-        SharedPreferences prefs = getSharedPreferences("dropbox-auth-info", MODE_PRIVATE);
-
-        String serializedCredential = prefs.getString("credential", null);
-
-        if (serializedCredential == null) {
-            DbxCredential credential = Auth.getDbxCredential();
-
-            if (credential != null && !credential.aboutToExpire()) {
-                prefs.edit().putString("credential", credential.toString()).apply();
-                uploadData(credential);
-            }
-            else {
-                startOAuth2Authentication(this, APP_KEY, app_scope);
-            }
-        }
-        else {
-            try {
-                DbxCredential credential = DbxCredential.Reader.readFully(serializedCredential);
-
-                uploadData(credential);
-            } catch (JsonReadException e) {
-                throw new IllegalStateException("Credential data corrupted: " + e.getMessage());
-            }
-        }
-
-
-        String uid = Auth.getUid();
-        String storedUid = prefs.getString("user-id", null);
-        if (uid != null && !uid.equals(storedUid)) {
-            prefs.edit().putString("user-id", uid).apply();
-        }
     }
 
 
@@ -591,44 +478,8 @@ public class DeviceControlActivity extends AppCompatActivity {
             sr = null;
         }
 
-        //Upload the database to dropbox if the app is still authorized to do so.
-        //Can't open a new activity to re-authenticate dropbox here bc the app is in the process of being closed,
-        //so the user has to re-open the Minikers app to re-authenticate Dropbox (if the app isn't authorized anymore)
-        SharedPreferences prefs = getSharedPreferences("dropbox-auth-info", MODE_PRIVATE);
-
-        String serializedCredential = prefs.getString("credential", null);
-
-        if (serializedCredential != null) {
-
-            try {
-                DbxCredential credential = DbxCredential.Reader.readFully(serializedCredential);
-
-
-                mUsageViewModel.checkpoint(new SimpleSQLiteQuery("pragma wal_checkpoint(full)"));
-                uploadData(credential);
-
-
-            } catch (JsonReadException e) {
-                throw new IllegalStateException("Credential data corrupted: " + e.getMessage());
-            }
-        }
     }
 
-    private void uploadData(DbxCredential dbxCredential) {
-        DropboxClientFactory.init(dbxCredential);
-        uploadDatabaseToDropbox(dbxCredential);
-    }
-
-
-    protected boolean hasToken() {
-        SharedPreferences prefs = getSharedPreferences("dropbox-sample", MODE_PRIVATE);
-        return prefs.getString("credential", null) != null;
-    }
-
-    public static void startOAuth2Authentication(Context context, String app_key, List<String> scope) {
-        Auth.startOAuth2PKCE(context, app_key, DbxRequestConfigFactory.getRequestConfig(), scope);
-    }
-    //End example authorization code
 
     @Override
     protected void onDestroy() {

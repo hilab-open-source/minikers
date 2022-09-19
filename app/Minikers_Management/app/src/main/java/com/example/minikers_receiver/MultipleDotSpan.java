@@ -17,7 +17,7 @@ public class MultipleDotSpan implements LineBackgroundSpan {
     private float radius;
     private int color;
     private int position; //As in an array. E.g. a dot can be the seventh dot on a device where only 5 dots fit in a row, so it ends up on the next row.
-    private float totalWidth; //how many pixels/dp wide a row is
+    private float totalWidth; //How many pixels/dp wide a row is
     private float totalHeight;
 
     private int numDotsInRow;

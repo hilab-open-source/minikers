@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.LineChart;
 
-class UsageViewHolder extends RecyclerView.ViewHolder {
+public class UsageViewHolder extends RecyclerView.ViewHolder {
     TextView timeText;
     LineChart currentGraph;
     TextView voltageText;
@@ -18,7 +18,7 @@ class UsageViewHolder extends RecyclerView.ViewHolder {
     LinearLayout rootLayout;
     LinearLayout graphsHolder;
 
-    private UsageViewHolder(View itemView) {
+    public UsageViewHolder(View itemView) {
         super(itemView);
 
         timeText = (TextView) itemView.findViewById(R.id.timeText);

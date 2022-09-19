@@ -5,9 +5,7 @@ import android.graphics.Paint;
 import android.text.style.LineBackgroundSpan;
 import android.util.Log;
 
-/**
- * Span to draw a dot centered under a section of text
- */
+
 public class LineSpan implements LineBackgroundSpan {
 
     /**
@@ -24,31 +22,21 @@ public class LineSpan implements LineBackgroundSpan {
 
     float xoffset = 0;
 
-    /**
-     * Create a span to draw a dot using default radius and color
-     *
-     * @see #LineSpan(float, int)
-     */
+
     public LineSpan() {
         this.height = DEFAULT_HEIGHT;
         this.width = DEFAULT_WIDTH;
         this.color = 0;
     }
 
-    /**
-     * Create a span to draw a dot using a specified color
-     *
-     */
+
     public LineSpan(int color) {
         this.height = DEFAULT_HEIGHT;
         this.width = DEFAULT_WIDTH;
         this.color = color;
     }
 
-    /**
-     * Create a span to draw a line width a specified width
-     *
-     */
+
     public LineSpan(float width) {
         this.width = width;
         this.height = DEFAULT_HEIGHT;
@@ -56,10 +44,7 @@ public class LineSpan implements LineBackgroundSpan {
     }
 
 
-    /**
-     * Create a span to draw a dot using a specified width and color
-     *
-     */
+
     public LineSpan(float width, int color) {
         this.width = width;
         this.height = DEFAULT_HEIGHT;
@@ -96,7 +81,7 @@ public class LineSpan implements LineBackgroundSpan {
         if(rightcoord > right)
             rightcoord = right;
 
-        canvas.drawRect(leftcoord, topcoord, rightcoord, bottomcoord, paint); //hardcoding for janky testing
+        canvas.drawRect(leftcoord, topcoord, rightcoord, bottomcoord, paint);
         paint.setColor(oldColor);
     }
 }

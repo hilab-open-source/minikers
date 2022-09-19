@@ -1,5 +1,7 @@
 plugins {
     id 'com.android.application'
+
+    id 'com.google.gms.google-services' //For firebase
 }
 
 android {
@@ -50,4 +52,14 @@ dependencies {
 
     //OpenCSV
     implementation 'com.opencsv:opencsv:5.5'
+
+
+    // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:30.4.1')
+
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation 'com.google.firebase:firebase-analytics'
+
+    // Add the dependencies for any other desired Firebase products
+    implementation 'com.google.firebase:firebase-firestore'
 }

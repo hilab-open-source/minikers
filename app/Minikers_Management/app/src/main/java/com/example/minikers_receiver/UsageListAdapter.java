@@ -8,10 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -22,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class UsageListAdapter extends ListAdapter<Usage, UsageViewHolder> {
+public class UsageListAdapter extends RecyclerView.Adapter<UsageViewHolder> {
 
     ArrayList<LineChart> currentGraphs;
     ArrayList<Double> voltages;
@@ -35,8 +33,8 @@ public class UsageListAdapter extends ListAdapter<Usage, UsageViewHolder> {
     private static final String TAG = "GraphRecyclerAdapter";
 
 
-    public UsageListAdapter(@NonNull DiffUtil.ItemCallback<Usage> diffCallback, Context ct, ArrayList<LineChart> currentGraphs, ArrayList<Double> voltages, ArrayList<LocalTime> startTimes, ArrayList<LocalTime> endTimes, ArrayList<ActuationType> uses) {
-        super(diffCallback);
+    public UsageListAdapter(Context ct, ArrayList<LineChart> currentGraphs, ArrayList<Double> voltages, ArrayList<LocalTime> startTimes, ArrayList<LocalTime> endTimes, ArrayList<ActuationType> uses) {
+
 
         ctx = ct;
         this.currentGraphs = currentGraphs;
@@ -87,12 +85,11 @@ public class UsageListAdapter extends ListAdapter<Usage, UsageViewHolder> {
 
     @Override
     public void onBindViewHolder(UsageViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder was called!!!");
-
+        Log.d(TAG, "onBindViewHolder");
 
         holder.graphsHolder.removeView(holder.currentGraph);
 
-        //Todo: Refactor and remove magic numbers
+
         if(currentGraphs.get(position).getParent() != null)
             ((ViewGroup)currentGraphs.get(position).getParent()).removeView(currentGraphs.get(position));
         holder.graphsHolder.addView(currentGraphs.get(position));
@@ -137,16 +134,5 @@ public class UsageListAdapter extends ListAdapter<Usage, UsageViewHolder> {
         holder.setCurrentGraph(cg);
     }
 
-    static class WordDiff extends DiffUtil.ItemCallback<Usage> {
 
-        @Override
-        public boolean areItemsTheSame(@NonNull Usage oldItem, @NonNull Usage newItem) {
-            return oldItem == newItem;
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull Usage oldItem, @NonNull Usage newItem) {
-            return oldItem.toString().equals(newItem.toString());
-        }
-    }
 }

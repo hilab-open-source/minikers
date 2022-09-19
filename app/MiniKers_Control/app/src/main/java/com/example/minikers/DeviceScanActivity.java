@@ -74,8 +74,6 @@ public class DeviceScanActivity extends ListActivity {
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
 
-    private ArrayList<String> sampleDeviceNames;
-    private ArrayList<String> sampleDeviceAddresses;
 
 
     @Override

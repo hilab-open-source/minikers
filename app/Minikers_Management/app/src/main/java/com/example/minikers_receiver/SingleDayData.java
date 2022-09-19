@@ -1,3 +1,4 @@
+
 package com.example.minikers_receiver;
 
 
@@ -6,58 +7,39 @@ import static com.example.minikers_receiver.CalendarActivity.EXTRAS_DEVICE_ADDRE
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.CombinedChart;
+
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.ObjectInputStream;
-import java.lang.reflect.Array;
-import java.nio.Buffer;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import com.google.common.primitives.Floats;
-import com.google.common.primitives.Ints;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
+
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Calendar;
 
 public class SingleDayData extends AppCompatActivity {
 
@@ -75,8 +57,11 @@ public class SingleDayData extends AppCompatActivity {
     String date;
 
 
-    private UsageViewModel mUsageViewModel;
     private String mDeviceAddress;
+
+    //For firebase
+    FirebaseFirestore db;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -85,71 +70,104 @@ public class SingleDayData extends AppCompatActivity {
 
         final Intent intent = getIntent();
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
-        if(mDeviceAddress == null)
-            mDeviceAddress = "AA:BB:CC:DD:EE:FF"; //For testing
+        if(mDeviceAddress == null) {
+            mDeviceAddress = "AA:BB:CC:DD:EE:FF";
+            Log.w(TAG, "Device address is null!");
+        }
 
-        mUsageViewModel = MainActivity.mUsageViewModel;
+
 
 
         titleText = (TextView) findViewById(R.id.fillerText);
         Intent i = getIntent();
         date = i.getStringExtra("date");
+        int year = i.getIntExtra("year", 0);
+        int month = i.getIntExtra("month", 0);
+        int day = i.getIntExtra("day", 0);
+        if(year == 0 || month == 0 || day == 0) {
+            Log.w(TAG, "Invalid year, month, or day passed from CalendarActivity to SingleDayData");
+        }
         titleText.setText("Data for " + date);
 
-        Log.d(TAG, "In SingleDayData, address is " + mUsageViewModel);
 
-        ArrayList<String> startTimeStrings = new ArrayList<String>(mUsageViewModel.getUsageStartTimesFromDayForMacAddress(mDeviceAddress, date));
-        Log.d(TAG, "timeStrings list from synchronous database call is " + startTimeStrings.toString());
-        startTimes = stringsToLocalTimes(startTimeStrings);
 
-        ArrayList<String> endTimeStrings = new ArrayList<String>(mUsageViewModel.getUsageEndTimesFromDayForMacAddress(mDeviceAddress, date));
-        endTimes = stringsToLocalTimes(endTimeStrings);
 
-        //Parse Strings to ActuationTypes
-        ArrayList<String> actuationTypeStrings = new ArrayList<String>(mUsageViewModel.getUsageTypesFromDayForMacAddress(mDeviceAddress, date));
+        startTimes = new ArrayList<LocalTime>();
+
+        endTimes = new ArrayList<LocalTime>();
+
+        voltages = new ArrayList<Double>();
+
         uses = new ArrayList<ActuationType>();
-        actuationTypeStrings.forEach((str) -> {
-            uses.add(ActuationType.valueOf(str));
-        });
 
 
+        db = FirebaseFirestore.getInstance();
 
+        Calendar startDay = Calendar.getInstance();
+        startDay.set(year, month - 1, day, 0, 0, 0); //Month indexing starts at 0 instead of 1
+        Date d = startDay.getTime();
+
+
+        Calendar endBeforeDay = (Calendar) startDay.clone();
+        endBeforeDay.add(Calendar.DAY_OF_MONTH, 1);
+        Date e = endBeforeDay.getTime();
 
         currentGraphs = new ArrayList<LineChart>();
 
-        //Set up currentGraphs
-        ArrayList<Usage> usages = new ArrayList<Usage>(mUsageViewModel.getUsagesOfMacAddressForDay(mDeviceAddress, date));
-        Log.d(TAG, "Found " + usages.size() + " usages for date " + date + " for mac address " + mDeviceAddress);
-        for (Usage usage : usages) {
-            Log.d(TAG, "heeeres a usage");
-            LineChart currentGraph = new LineChart(this);
-            createGraph(currentGraph, stringToFloatArray(usage.getCurrentXValues()), stringToFloatArray(usage.getCurrentYValues()), "Current (mA vs ms)", ContextCompat.getColor(this, R.color.current));
-            currentGraphs.add(currentGraph);
 
-        }
+        db.collection(mDeviceAddress)
+                .whereGreaterThan(FirestoreKey.START_TIME_KEY, d)
+                .whereLessThan(FirestoreKey.START_TIME_KEY, e)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
 
-        //Set up voltages
-        voltages = new ArrayList<Double>(mUsageViewModel.getVoltagesFromDayForMacAddress(mDeviceAddress, date));
+                                uses.add(ActuationType.valueOf(document.getString(FirestoreKey.MODE_KEY)));
+
+                                voltages.add(document.getDouble(FirestoreKey.VOLTAGE_KEY));
 
 
-        setupRecyclerView();
+                                LineChart currentGraph = new LineChart(getApplicationContext());
+                                createGraph(currentGraph, (List<Double>) document.get(FirestoreKey.CURRENT_X_KEY), (List<Double>) document.get(FirestoreKey.CURRENT_Y_KEY), "Current (mA vs ms)", ContextCompat.getColor(getApplicationContext(), R.color.current));
+                                currentGraphs.add(currentGraph);
+                                Log.d(TAG, "currentGraphs size: " + currentGraphs.size());
 
-    }
+                                //Start and end times:
+                                long startTimeEpoch = ((Timestamp) document.get(FirestoreKey.START_TIME_KEY)).getSeconds();
+                                ZoneOffset offset = ZoneId.systemDefault().getRules().getOffset(LocalDateTime.now());
+                                LocalTime startTime = LocalDateTime.ofEpochSecond(startTimeEpoch, 0, offset).toLocalTime();
+                                startTimes.add(startTime);
 
-    private ArrayList<LocalTime> stringsToLocalTimes(ArrayList<String> strings){
-        ArrayList<LocalTime> times = new ArrayList<LocalTime>();
-        strings.forEach((str) ->{
-            times.add(LocalTime.parse(str));
-        });
+                                long endTimeEpoch = ((Timestamp) document.get(FirestoreKey.END_TIME_KEY)).getSeconds();
+                                LocalTime endTime = LocalDateTime.ofEpochSecond(endTimeEpoch, 0, offset).toLocalTime();
+                                endTimes.add(endTime);
 
-        return times;
+                            }
+
+
+                            setupRecyclerView();
+                        }
+                        else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
+
+
+
     }
 
 
     private void setupRecyclerView() {
         recycler = (RecyclerView) findViewById(R.id.recycler);
 
-        final UsageListAdapter adapter = new UsageListAdapter(new UsageListAdapter.WordDiff(), this, currentGraphs, voltages, startTimes, endTimes, uses);
+        final UsageListAdapter adapter = new UsageListAdapter(this, currentGraphs, voltages, startTimes, endTimes, uses);
 
         recycler.setAdapter(adapter);
 
@@ -159,30 +177,8 @@ public class SingleDayData extends AppCompatActivity {
     }
 
 
-
-    float[] stringToFloatArray(String str) {
-        //str is in the format [1, 2, 3, 4, 5] so need to separate using commas as delimiters, and remove the opening and closing brackets
-        String[] stringArray = str.replaceAll("\\[", "")
-                .replaceAll("]", "")
-                .replaceAll(" ", "")
-                .split(",");
-
-        int length = stringArray.length;
-        float[] floats = new float[length];
-
-
-        //Parse string array as int array
-        for (int i = 0; i < length; i++) {
-            floats[i] = Float.valueOf(stringArray[i]);
-        }
-
-        Log.d(TAG, "stringToIntArray: " + Arrays.toString(floats));
-
-        return floats;
-    }
-
-    private boolean createGraph(LineChart lc, float[] xvals, float[] yvals, String title, int color) {
-        if(xvals.length != yvals.length) {
+    private boolean createGraph(LineChart lc, List<Double> xvals, List<Double> yvals, String title, int color) {
+        if(xvals.size() != yvals.size()) {
             Log.e(TAG, "Error: Domain and range have different lengths");
             return false;
         }
@@ -190,70 +186,7 @@ public class SingleDayData extends AppCompatActivity {
         List<Entry> points = getPointsFloat(yvals, xvals);
         LineDataSet dataSet = new LineDataSet(points, title);
         dataSet.setColor(color);
-        dataSet.setDrawCircles(false); //Attempting to not display a giant bubble on each point
-        LineData lineData = new LineData(dataSet); //LineData holds all the datasets for the graph -- in this case we only have one dataset
-        lc.setData(lineData);
-
-        lc.invalidate(); //Refresh
-
-        lc.setTouchEnabled(true);
-        return true;
-    }
-
-    private List<Entry> getPointsFloat(float[] yvals, float[] xvals) {
-        return getPointsFloat(Floats.asList(yvals), Floats.asList(xvals));
-    }
-
-    private List<Entry> getPointsFloat(List<Float> yvals, List<Float> xvals) {
-        if(xvals.size() != yvals.size()) {
-            Log.e(TAG, "Error: Domain and range have different lengths");
-            return null;
-        }
-
-        List<Entry> points = new ArrayList<Entry>();
-        int size = xvals.size();
-        for(int k = 0; k < size; k++) {
-            points.add(new Entry(xvals.get(k), yvals.get(k)));
-        }
-        return points;
-    }
-
-
-
-
-
-    int[] stringToIntArray(String str) {
-        //str is in the format [1, 2, 3, 4, 5] so need to separate using commas as delimiters, and remove the opening and closing brackets
-        String[] stringArray = str.replaceAll("\\[", "")
-                .replaceAll("]", "")
-                .replaceAll(" ", "")
-                .split(",");
-
-        //Log.d(TAG, "string -> array is: " + Arrays.toString(stringArray));
-        int length = stringArray.length;
-        int[] ints = new int[length];
-
-
-        //Parse string array as int array
-        for (int i = 0; i < length; i++) {
-            ints[i] = Integer.valueOf(stringArray[i]);
-        }
-
-        Log.d(TAG, "stringToIntArray: " + Arrays.toString(ints));
-
-        return ints;
-    }
-
-    //Todo: make this a generic method
-    private boolean createGraph(LineChart lc, int[] xvals, int[] yvals, String title, int color) {
-        if(xvals.length != yvals.length) {
-            Log.e(TAG, "Error: Domain and range have different lengths");
-            return false;
-        }
-
-        List<Entry> points = getPoints(yvals, xvals);
-        LineDataSet dataSet = new LineDataSet(points, title);
-        dataSet.setColor(color);
+        dataSet.setDrawCircles(false); //Don't draw a bubble on each point
         LineData lineData = new LineData(dataSet); //LineData holds all the datasets for the graph -- in this case we only have one dataset
         lc.setData(lineData);
 
@@ -264,11 +197,7 @@ public class SingleDayData extends AppCompatActivity {
     }
 
 
-    private List<Entry> getPoints(int[] yvals, int[] xvals) {
-        return getPoints(Ints.asList(yvals), Ints.asList(xvals));
-    }
-
-    private List<Entry> getPoints(List<Integer> yvals, List<Integer> xvals) {
+    private List<Entry> getPointsFloat(List<Double> yvals, List<Double> xvals) {
         if(xvals.size() != yvals.size()) {
             Log.e(TAG, "Error: Domain and range have different lengths");
             return null;
@@ -277,9 +206,13 @@ public class SingleDayData extends AppCompatActivity {
         List<Entry> points = new ArrayList<Entry>();
         int size = xvals.size();
         for(int k = 0; k < size; k++) {
-            points.add(new Entry(xvals.get(k), yvals.get(k)));
+            points.add(new Entry(xvals.get(k).floatValue(), yvals.get(k).floatValue()));
         }
         return points;
     }
+
+
+
+
 
 }

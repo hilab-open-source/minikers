@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "94142771408",
+    "project_id": "minikers-99154",
+    "storage_bucket": "minikers-99154.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94142771408:android:0492b0a026084c5a15aed5",
+        "android_client_info": {
+          "package_name": "com.example.minikers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "94142771408-9v312fo5ak53jljva1vfgsm68sjsldm0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPN-3CP0Hu75B_Y882iTqXCFJNPVWZKGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "94142771408-9v312fo5ak53jljva1vfgsm68sjsldm0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
